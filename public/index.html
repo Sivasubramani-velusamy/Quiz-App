@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Assessment Board - Indian States Quiz</title>
+    
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Authentication Container -->
+    <div id="authContainer" class="auth-container">
+        <div class="auth-card">
+            <div class="auth-title">🏛️ Smart Assessment Board</div>
+            <div class="auth-subtitle">Learn Indian States & Capitals</div>
+            
+            <!-- Login Form -->
+            <div id="loginForm">
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" id="loginUsername" class="form-input" placeholder="Enter your username">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="loginPassword" class="form-input" placeholder="Enter your password">
+                </div>
+                <button class="btn" onclick="login()">🚀 Login</button>
+                <div class="auth-switch">
+                    Don't have an account? <span class="auth-link" onclick="showSignup()">Sign up here</span>
+                </div>
+            </div>
+
+            <!-- Signup Form -->
+            <div id="signupForm" style="display: none;">
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" id="signupName" class="form-input" placeholder="Enter your full name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" id="signupUsername" class="form-input" placeholder="Choose a username">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="signupPassword" class="form-input" placeholder="Create a password">
+                </div>
+                <button class="btn" onclick="signup()">📝 Sign Up</button>
+                <div class="auth-switch">
+                    Already have an account? <span class="auth-link" onclick="showLogin()">Login here</span>
+                </div>
+            </div>
+
+            <div id="authMessage"></div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="appContainer" class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    🏛️ Smart Assessment Board
+                </div>
+                <div class="user-info">
+                    <button class="sound-btn" onclick="toggleSound()" title="Toggle Sound">
+                        <span id="soundIcon">🔊</span>
+                    </button>
+                    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">
+                        <span id="themeIcon">🌙</span>
+                    </button>
+                    <span>Welcome, <strong id="currentUserName"></strong>!</span>
+                    <button class="btn btn-small btn-danger" onclick="logout()">Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="nav-container">
+            <div class="nav-menu">
+                <div class="nav-item active" onclick="showPage('dashboard')">🏠 Dashboard</div>
+                <div class="nav-item" onclick="showPage('quiz')">🎯 Quiz</div>
+                <div class="nav-item" onclick="showPage('info')">📚 Know Your State</div>
+                <div class="nav-item" onclick="showPage('leaderboard')">🏆 Leaderboard</div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Page -->
+            <div id="dashboardPage" class="page active">
+                <div class="welcome-card">
+                    <div class="welcome-title">Welcome to India Quiz!</div>
+                    <p style="font-size: 1.2rem; color: #666; margin-top: 10px;">
+                        Test your knowledge of Indian states and capitals through interactive quizzes
+                    </p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">🎯</div>
+                        <div class="stat-value" id="totalQuizzes">0</div>
+                        <div class="stat-label">Quizzes Taken</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⭐</div>
+                        <div class="stat-value" id="bestScore">0%</div>
+                        <div class="stat-label">Best Score</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-value" id="avgScore">0%</div>
+                        <div class="stat-label">Average Score</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🏆</div>
+                        <div class="stat-value" id="userRank">-</div>
+                        <div class="stat-label">Your Rank</div>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 30px;">
+                    <button class="btn" onclick="startQuiz()" style="font-size: 1.3rem; padding: 15px 30px;">
+                        🚀 Start New Quiz
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quiz Page -->
+            <div id="quizPage" class="page">
+                <div class="quiz-container">
+                    <div class="quiz-header">
+                        <div class="quiz-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                            </div>
+                            <div style="text-align: center; font-weight: 600;">
+                                Question <span id="currentQuestion">1</span> of <span id="totalQuestions">10</span>
+                            </div>
+                        </div>
+                        <div class="quiz-stats">
+                            <div class="quiz-stat">
+                                Score: <span id="currentScore">0</span>
+                            </div>
+                            <div class="quiz-stat">
+                                Time: <span id="quizTimer">00:00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">What is the capital of</div>
+                        <div class="state-name" id="questionState">Maharashtra</div>
+                    </div>
+
+                    <div class="options-grid" id="optionsGrid">
+                        <!-- Options will be populated by JavaScript -->
+                    </div>
+
+                    <div id="quizFeedback" class="feedback" style="display: none;"></div>
+
+                    <div style="text-align: center; margin-top: 30px;">
+                        <button id="nextQuestionBtn" class="btn btn-secondary" onclick="nextQuestion()" style="display: none;">
+                            Next Question ➡️
+                        </button>
+                        <button class="btn btn-danger" onclick="endQuiz()">
+                            End Quiz
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Page -->
+            <div id="resultsPage" class="page">
+                <div class="results-container">
+                    <div class="celebration" id="celebrationIcon">🎉</div>
+                    <div class="results-title">Quiz Complete!</div>
+                    <div class="final-score" id="finalScoreDisplay">85%</div>
+                    
+                    <div class="results-grid">
+                        <div class="result-item">
+                            <div class="result-value" id="correctAnswers">8</div>
+                            <div class="result-label">Correct Answers</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-value" id="wrongAnswers">2</div>
+                            <div class="result-label">Wrong Answers</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-value" id="timeTaken">02:45</div>
+                            <div class="result-label">Time Taken</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-value" id="accuracyRate">85%</div>
+                            <div class="result-label">Accuracy</div>
+                        </div>
+                    </div>
+
+                    <div id="performanceMessage" style="font-size: 1.3rem; margin: 20px 0; font-weight: 600;"></div>
+
+                    <div style="margin-top: 30px;">
+                        <button class="btn" onclick="startQuiz()">🔄 Take Another Quiz</button>
+                        <button class="btn btn-secondary" onclick="showPage('leaderboard')">🏆 View Leaderboard</button>
+                        <button class="btn btn-secondary" onclick="showPage('dashboard')">🏠 Dashboard</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- State Info Page -->
+            <div id="infoPage" class="page">
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <h2 style="color: var(--primary-color); font-size: 2.5rem; margin-bottom: 10px;">📚 Know Your States</h2>
+                    <p style="font-size: 1.2rem; color: #666;">Click on any state to learn more about it</p>
+                </div>
+
+                <div class="states-grid" id="statesInfoGrid">
+                    <!-- States will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Leaderboard Page -->
+            <div id="leaderboardPage" class="page">
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <h2 style="color: var(--primary-color); font-size: 2.5rem; margin-bottom: 10px;">🏆 Leaderboard</h2>
+                    <p style="font-size: 1.2rem; color: #666;">Top performers in Indian States Quiz</p>
+                </div>
+
+                <div class="leaderboard-table">
+                    <div class="table-header">
+                        <div>Rank</div>
+                        <div>Player</div>
+                        <div>Best Score</div>
+                        <div>Quizzes Taken</div>
+                        <div class="accuracy">Accuracy</div>
+                    </div>
+                    <div id="leaderboardBody">
+                        <!-- Leaderboard entries will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    
+<script src="script.js"></script>
+</body>
+</html>
